@@ -12,14 +12,12 @@ const Wrapper = styled.div`
     border-radius: 50%;
 `;
 
-const Lamp = ({lampOn, position}) => {
-    return (
-        <Wrapper lampOn={lampOn} position={position}>
-            <div>
-                
-            </div>
-        </Wrapper>
-    )
-};
+const Lamp = ({lampOn, position}) => (
+    <Wrapper lampOn={lampOn} position={position}>
+        <div>
+            
+        </div>
+    </Wrapper>
+);
 
 export default Lamp;
