@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 //API
 import API from "../API";
 
@@ -15,7 +15,7 @@ export const useHomeFetch = () => {
     const [searchTerm, setSearchTerm] = useState(""); //  empty string by default
 
     const [state, setState] = useState(initialState);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // not loading initially
     const [error, setError] = useState(false);
     // state triggered from the Button
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -31,6 +31,7 @@ const fetchMovies = async (page, searchTerm = "") => {
         // console.log(movies);
         // console.log(state.page);
 
+        // state setter  with checking for previous value
         setState((prev) => ({
         ...movies,
         results:
