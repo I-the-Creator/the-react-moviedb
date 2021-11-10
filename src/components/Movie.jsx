@@ -9,6 +9,8 @@ import BreadCrump from './BreadCrump';
 import Grid from './Grid';
 import Spinner from './Spinner';
 import MovieInfo from './MovieInfo';
+import MovieInfoBar from './MovieInfoBar';
+import Actor from './Actor';
 
 //Hook
 import { useMovieFetch } from '../hooks/useMovieFetch';
@@ -30,10 +32,30 @@ const Movie = () => {
     if (error) return <div>Something went wrong...</div>;
 
     return (
-        <>
-            <BreadCrump movieTitle={movie.original_title} />
-            <MovieInfo movie={movie} />  {/* sent the prop with movie data to MovieInfo component */}
-        </>
+      <>
+        <BreadCrump movieTitle={movie.original_title} />
+        <MovieInfo movie={movie} />{" "}
+        {/* sent the prop with movie data to MovieInfo component */}
+        <MovieInfoBar
+          time={movie.runtime}
+          budget={movie.budget}
+          revenue={movie.revenue}
+        />
+        <Grid header="Actors">
+          {movie.actors.map((actor) => (
+            <Actor
+              key={actor.credit_id}
+              name={actor.name}
+              character={actor.character}
+              imageUrl={
+                actor.profile_path
+                  ? `${IMAGE_BASE_URL}${POSTER_SIZE}${actor.profile_path}`
+                  : NoImage
+              }
+            />
+          ))}
+        </Grid>
+      </>
     );
 };
 
