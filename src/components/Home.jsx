@@ -46,16 +46,16 @@ const Home = () => {
             }
             <SearchBar setSearchTerm={setSearchTerm} />
             <Grid header={searchTerm ? 'Search Results' : 'Popular Movies'}>
-                {state.results.map(movie =>(
-                    <Thumb
-                        key={movie.id}
+                {state.results.map(movie =>(  // mapping the state.result and extract data for each movie
+                    <Thumb      /* send the props to 'Thumb' component */
+                        key={movie.id}   /* uniq key */
                         clickable
                         image={
                             movie.poster_path
                             ? IMAGE_BASE_URL + POSTER_SIZE + movie.poster_path
                             : NoImage
                         }
-                        movieId={movie.id}
+                        movieId={movie.id}   /*  to use in a Router for links to movie pages */
                     />
                 ))}
             </Grid>
