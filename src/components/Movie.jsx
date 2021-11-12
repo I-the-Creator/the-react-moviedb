@@ -26,7 +26,7 @@ const Movie = () => {
     //destructure props exported from the hook
     const { state: movie, loading, error } = useMovieFetch(movieId);
 
-    console.log(movie);  // json object 
+    // console.log(movie);  // json object 
 
     if (loading) return <Spinner />
     if (error) return <div>Something went wrong...</div>;
