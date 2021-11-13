@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 //Routing
 import { Link } from 'react-router-dom';
@@ -18,5 +19,9 @@ const BreadCrump = ({ movieTitle }) => (
         </Content>
     </Wrapper>
 );
+
+BreadCrump.propTypes = {
+    movieTitle: PropTypes.string
+}
 
 export default BreadCrump;
