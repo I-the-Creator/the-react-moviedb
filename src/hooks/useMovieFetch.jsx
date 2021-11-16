@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import API from '../API';  // import functions for fetching
 
+//Helpers
+import { isPersistedState } from "../helpers";
+
 export const useMovieFetch = movieId => {
 
     const [state, setState] = useState({});  // empty object by default
@@ -39,9 +42,23 @@ export const useMovieFetch = movieId => {
             }
         };
 
-        fetchMovie();  // invoke the fetching function
 
+        // check the data stored in session storage and get ot
+        const sessionState = isPersistedState(movieId);
+        if(sessionState) {
+            setState(sessionState);
+            setLoading(false); // do not show spinner if have data in session storage
+            return; // code below is omitted
+        }
+
+        fetchMovie();  // invoke the fetching function
     }, [movieId])    /*  change the state if movieId changes */
+
+    //Write to session storage
+    useEffect(() => {
+        // each movie will be stored to the sessionStorage with its ID
+        sessionStorage.setItem(movieId, JSON.stringify(state));
+    }, [movieId, state]);
 
     return { state, loading, error};
 };
