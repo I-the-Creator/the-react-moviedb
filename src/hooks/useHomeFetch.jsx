@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 //API
 import API from "../API";
+//Helpers 
+import { isPersistedState } from "../helpers";
 
 const initialState = {
     page: 0,
@@ -43,8 +45,19 @@ const fetchMovies = async (page, searchTerm = "") => {
     setLoading(false);
 };
 
-  // Initial render and search
+  // Initial render and Search
     useEffect(() => {
+        // check for session storage and get data from there if we're not searching
+        if(!searchTerm) {
+            const sessionState = isPersistedState('homeState'); // get data from sessionStorage by name 'homeState'
+                // if sessionStorage exist we set to setState
+            if (sessionState) {
+                console.log('Grabbing from sessionStorage');
+                setState(sessionState);
+                return; // return from useEffect and not fetching data
+            }
+        }
+        console.log('Grabbing from API');
         setState(initialState); // reset search request
         fetchMovies(1, searchTerm); // render 1st and then page depending on searchTerm
     }, [searchTerm]);
@@ -57,9 +70,14 @@ const fetchMovies = async (page, searchTerm = "") => {
         fetchMovies(state.page + 1, searchTerm);
         //set 'isLoadingMore' state default value 
         setIsLoadingMore(false);
-    
 }, [isLoadingMore, searchTerm, state.page])
 
+// Write to sessionStorage
+    useEffect(() => {
+         /* write the data (state) to sessionStorage with name 'homeState', stringify it to string previously,
+         as we can store data in session storage only as a string */
+        if(!searchTerm) sessionStorage.setItem('homeState', JSON.stringify(state))
+    }, [searchTerm, state]);
 
   return { state, loading, error, searchTerm, setSearchTerm, setIsLoadingMore };
 };
