@@ -31,7 +31,7 @@ const Home = () => {
     } = useHomeFetch();
 
     // console.log(state.total_pages);   // debug  -  total_pages property 
-    console.log(state);   // debug  -   fetched data
+    // console.log(state);   // debug  -   fetched data
 
     if( error ) return <div>Something went wrong...</div>;
 
