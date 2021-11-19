@@ -28,7 +28,6 @@ class SearchBar  extends Component {
             }, 500);
         }
     }
-
     render() {
         const { value } = this.state;   // destructure this.state
         return (
@@ -50,7 +49,6 @@ class SearchBar  extends Component {
         );
     }
 }
-
 SearchBar.propTypes = {
     setSearchTerm: PropTypes.func,
     callback: PropTypes.func,
