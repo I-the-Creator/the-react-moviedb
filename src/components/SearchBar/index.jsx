@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 
 //Image
@@ -8,48 +8,47 @@ import searchIcon from '../../images/search-icon.svg';
 import { Wrapper, Content } from "./SearchBar.styles";
 
 
-// Controlled react component
-const SearchBar = ({ setSearchTerm }) => {
+// Controlled react class component
+class SearchBar  extends Component {
 
-    const [state, setState] = useState('');
+    state = { value : ''};
+    timeout = null;
 
-    // in order no to trigger 'setSearchTerm' in initial render
-    const initial = useRef(true);  // useRef won't trigger a re-render
-        // console.log(initial.current);    // true
+    componentDidUpdate(_prevProps, prevState) {
+        if(this.state.value !== prevState.value) {
+            const { setSearchTerm } = this.props;
 
+            // clear timeout before we do something else
+            clearTimeout(this.timeout);
 
-    // delay in sending data to 'useHomeFetch' using timeout
-    useEffect(() => {
-
-        if (initial.current) {
-            initial.current = false;   // change the value for next render and that part will be skipped 
-            return;  //  goes out of useEffect and don't trigger 'setSearchTerm' during initial render
+            // call the setSearchTerm each 500ms 
+            this.timeout = setTimeout(() => {   
+                const { value } = this.state;  // grab property from state (search query)
+                setSearchTerm(value)
+            }, 500);
         }
+    }
 
-        const timer = setTimeout(() => {   // call the setSearchTerm each 500ms 
-            setSearchTerm(state)
-        }, 500)
-
-        return () => clearTimeout(timer)  // clear the 'timer' timeout on new render, not current
-    }, [setSearchTerm, state])
-
-    return (
-        <Wrapper>
-            <Content>
-                <img src={searchIcon} alt='search-icon' />
-                <input
-                    type='text'
-                    placeholder='Search Movie'
-                    // get the value from input field. Invoke inline function, execute setState with event.currentTarget.value as an argument this value goes into 'state'.
-                    // every time it changes it triggers the setState
-                    onChange={event => setState(event.currentTarget.value)} 
-                        //  console.log(state);   state will renew with 1 step lag
-                    // put the value form 'state' to the 'value'
-                    value = {state}
-                />
-            </Content>
-        </Wrapper>
-    )
+    render() {
+        const { value } = this.state;   // destructure this.state
+        return (
+            <Wrapper>
+                <Content>
+                    <img src={searchIcon} alt='search-icon' />
+                    <input
+                        type='text'
+                        placeholder='Search Movie'
+                        // get the value from input field. Invoke inline function, execute setState with event.currentTarget.value as an argument this value goes into 'state'.
+                        // every time it changes it triggers the setState
+                        onChange={event => this.setState({ value: event.currentTarget.value })} 
+                            //  console.log(state);   state will renew with 1 step lag
+                        // put the value form 'state' to the 'value'
+                        value = {value}
+                    />
+                </Content>
+            </Wrapper>
+        );
+    }
 }
 
 SearchBar.propTypes = {
