@@ -40,14 +40,14 @@ class Home extends Component {
       this.setState({ error: false, loading: true });
 
       const movies = await API.fetchMovies(searchTerm, page); // sent to 'state' state
-      // console.log(movies);
+        // console.log(movies);
       // console.log(state.page);
 
       // state setter  with checking for previous value
       this.setState((prev) => ({
         ...prev,
         movies: {
-          ...movies, // spread out previous movies
+          ...movies, // spread out previous movies in to object properties
           results:
             page > 1
               ? [...prev.movies.results, ...movies.results]
@@ -70,7 +70,7 @@ class Home extends Component {
   handleLoadMore = () =>
     this.fetchMovies(this.state.movies.page + 1, this.state.searchTerm);
 
-  // trigger Life Cicle Method to start grabbing data
+  // trigger Life Cycle Method to start grabbing data
   componentDidMount() {
     this.fetchMovies(1);
   }
