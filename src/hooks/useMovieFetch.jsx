@@ -42,7 +42,6 @@ export const useMovieFetch = movieId => {
             }
         };
 
-
         // check the data stored in session storage and get ot
         const sessionState = isPersistedState(movieId);
         if(sessionState) {

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';   // to gard params from the URL
+import React, { Component } from 'react';
+import { useParams } from 'react-router-dom';   // to grab params from the URL
 
 //Config
 import { IMAGE_BASE_URL, POSTER_SIZE } from '../config';
@@ -12,21 +12,64 @@ import MovieInfo from './MovieInfo';
 import MovieInfoBar from './MovieInfoBar';
 import Actor from './Actor';
 
-//Hook
-import { useMovieFetch } from '../hooks/useMovieFetch';
 //Image
 import NoImage from '../images/no_image.jpg';
+// API
+import API from '../API';  // import functions for fetching
 
-const Movie = () => {
-
-    // destructure props from useParam to get movieId
-    //  name param as 'movieId' as we named it like this in App.js in Routes
-    const { movieId } = useParams();   
-
-    //destructure props exported from the hook
-    const { state: movie, loading, error } = useMovieFetch(movieId);
-
+class Movie extends Component {
     // console.log(movie);  // json object 
+  state = {
+    movie : {},  // empty object to start with
+    loading : true,
+    error : false
+  };
+
+  fetchMovie = async () => {
+
+    //destructure prop 'movieId' from props.params.
+    // we add props.params before export (down below in const MovieWithParams)
+    const { movieId } = this.props.params;  // grab movieId from URL
+    // console.log(this.props.params);
+    
+    try {
+        this.setState({ error: false, loading: true })
+
+        // fetching data by movieIds
+        const movie = await API.fetchMovie(movieId);
+        const credits = await API.fetchCredits(movieId);
+
+        // console.log(movie);   // json object 
+
+        // Get Directors only
+        const directors = credits.crew.filter(  // JS filter function to get Directors from the array
+            member => member.job === 'Director'
+        );
+
+        // state setter without checing for previous value
+        this.setState({
+          movie : {
+            ...movie,  // destructure 'movie' object
+            actors: credits.cast,
+            directors
+          },
+          loading : false,
+        });
+
+    } catch (error) {
+        this.setState({ error: true, loading: false });
+    }
+};
+
+  // add life Cycle Method
+  componentDidMount() {
+    this.fetchMovie();
+  }
+
+  render() {
+
+    // destructure out props from state
+    const {movie, loading, error} = this.state;
 
     if (loading) return <Spinner />
     if (error) return <div>Something went wrong...</div>;
@@ -57,6 +100,11 @@ const Movie = () => {
         </Grid>
       </>
     );
+  }
 };
 
-export default Movie;
+// wrapper component shows Movie class component and provide it with params
+// we spread props for Movie and add additional one - params with useParams from react-router
+const MovieWithParams = props => <Movie { ...props} params={useParams() } />
+
+export default MovieWithParams;
