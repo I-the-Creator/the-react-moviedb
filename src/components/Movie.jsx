@@ -19,7 +19,7 @@ import NoImage from '../images/no_image.jpg';
 
 const Movie = () => {
 
-    // destructure props from useParam to get movieId
+    // destructure props from useParam to get movieId from URL
     //  name param as 'movieId' as we named it like this in App.js in Routes
     const { movieId } = useParams();   
 
