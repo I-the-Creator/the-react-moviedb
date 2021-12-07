@@ -21,7 +21,25 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = () => {};
+    const handleSubmit = async () => {
+        setError(false);
+        try {
+            //request authentication token and session ID
+            const requestToken = await API.getRequestToken();
+            const sessionId = await API.authenticate(
+                requestToken,
+                username,
+                password
+            );
+                console.log(sessionId);
+            setUser({ sessionId: sessionId.session_id, username });
+
+            navigate('/');
+
+        } catch (error) {
+            setError(true);
+        }
+    };
 
     const handleInput = e => {
         const name = e.currentTarget.name; /* grab the name from component 'name' prop */
@@ -34,6 +52,7 @@ const Login = () => {
 
     return (
         <Wrapper>
+            {error && <div className="error">There was an ERROR!</div>}  {/* error message if there is an error */}
             <label>Username:</label>
             <input 
                 type="text"
