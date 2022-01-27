@@ -1,5 +1,5 @@
 # MovieDB App - ReactJS Application
-This is the adaptive, fully functional Application to search, browse and rate (if logged in) your favourite movies and cartoones.\
+This is the adaptive, fully functional Application to search, browse and rate (if logged in) your favourite movies and cartoons.\
 'Login In' added as prototype. LoggedIn state is not stored, user will logged out upon page refresh.\
 Local storage is used to store movies data, so it won't be wiped out even after rebooting your device.\
 To get App functionality you have to get [The Movie DB](https://www.themoviedb.org/) API key, create ```.env``` file in root derictory and store your key there.\
